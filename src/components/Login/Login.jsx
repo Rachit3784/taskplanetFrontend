@@ -68,10 +68,7 @@ export default function Login() {
           placeholder="••••••••"
         />
 
-        <div className="forgot-row">
-          <span onClick={() => navigate("/forgot")}>Forgot password?</span>
-        </div>
-
+        
         <button className="login-btn" onClick={handleLogin} disabled={loading}>
           {loading ? "Loading..." : <>Sign In <ChevronRight size={18} /></>}
         </button>
