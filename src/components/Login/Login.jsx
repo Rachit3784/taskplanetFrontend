@@ -46,7 +46,7 @@ export default function Login() {
             <Clipboard size={28} />
           </div>
           <h2>Welcome back</h2>
-          <p>Sign in to access your groceries</p>
+          <p>Sign in to access your taskplanet</p>
         </div>
 
         <InputField
