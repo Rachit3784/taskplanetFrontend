@@ -7,7 +7,8 @@ import Signup from "./components/Signup/Signup";
 import Otp from "./components/Otp/Otp";
 import { mycontext } from './store/MyContext';
 import CreatePost from './components/CreatePost/CreatePost';
-import ProfileManagement from './components/Profilemanagement/profileManagement';
+import ProfileManagement from './components/Profilemanagement/ProfileManagement';
+
 
 
 const AuthLayout = () => <Outlet />;
