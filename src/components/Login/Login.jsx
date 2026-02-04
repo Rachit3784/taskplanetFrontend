@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Mail, Lock, ChevronRight, Clipboard,  } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import userStore from "../../store/MyStore";
-import "./login.css";
+import "./Login.css";
 import { mycontext } from "../../store/MyContext";
 
 export default function Login() {
