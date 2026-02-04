@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useContext } from "react";
-import "./ProfileManagement.css";
+import "./Profilemanagement.css";
 import userStore from "../../store/MyStore";
 import { Camera, Heart, MessageCircle, LogOut, Trash2, ArrowLeft } from "lucide-react";
 import Navbar from "../Navigation/Navbar";
