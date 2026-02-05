@@ -27,7 +27,7 @@ const CreatePost = () => {
     { label: "4:5", value: 4 / 5 },
     { label: "16:9", value: 16 / 9 },
     { label: "3:4", value: 3 / 4 },
-    { label: "Original", value: 2 / 5},
+    { label: "Original", value: null},
   ];
 
   const handleImageChange = (e) => {
@@ -137,16 +137,21 @@ const CreatePost = () => {
 
                 {/* --- DIMENSION SELECTOR --- */}
                 <div className="aspect-ratio-selector">
-                   {aspectRatios.map((ratio) => (
-                     <button 
-                       key={ratio.label}
-                       className={`ratio-btn ${aspect === ratio.value ? "active" : ""}`}
-                       onClick={() => setAspect(ratio.value)}
-                     >
-                       {ratio.label}
-                     </button>
-                   ))}
-                </div>
+  {aspectRatios.map((ratio) => (
+    <button
+      key={ratio.label}
+      // Value null hone par label se check karein taaki active color sahi dikhe
+      className={`ratio-btn ${
+        (ratio.value === aspect || (ratio.value === null && aspect === null)) ? "active" : ""
+      }`}
+      onClick={() => setAspect(ratio.value)}
+    >
+      {ratio.label}
+    </button>
+  ))}
+</div>
+
+
 
                 <div className="zoom-control">
                   <label>Zoom</label>
