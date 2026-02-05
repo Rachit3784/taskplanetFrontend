@@ -20,7 +20,7 @@ function Router() {
       {isLoggedIn ? (
         <>
           <Route path="/" element={<MainLayout />}>
-            <Route index element={<Navigate to="/" />} />
+            <Route index element={<Navigate to="/home" />} />
         <Route path="home" element={<Home />} />
             <Route path="createPost" element={<CreatePost />} />
             <Route path="manageProfile" element={<ProfileManagement />} />
