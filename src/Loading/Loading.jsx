@@ -7,7 +7,6 @@ export default function Loading() {
       <div className="loader-wrapper">
         <div className="gold-ring"></div>
         <div className="gold-ring ring-2"></div>
-
         <div className="brand-text">
           <span className="brand-main">TASKPLANET</span>
           <span className="brand-sub">Loading Experience</span>

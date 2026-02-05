@@ -6,6 +6,10 @@ import Navbar from "../Navigation/Navbar";
 import CommentPopup from "../Comment/CommentPopup";
 import { useNavigate } from "react-router-dom";
 import { mycontext } from "../../store/MyContext";
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
+
+
 
 function ProfileManagement() {
   const navigate = useNavigate();
@@ -227,11 +231,15 @@ function ProfileManagement() {
           {localPosts.map((post, index) => (
             <div key={post._id || index} className="post-card">
               <div className="post-header">
-                <img
-                  src={post.UserId?.profile || "https://via.placeholder.com/32"}
-                  className="user-pic"
-                  alt="user"
-                />
+                
+               <Zoom>
+  <img
+    src={post.UserId?.profile || "https://via.placeholder.com/32"}
+    className="user-pic"
+    alt="user"
+  />
+</Zoom>
+
                 <div className="user-info">
                   <div className="username">@{post.UserId?.username || "anonymous"}</div>
                   <div className="fullname">{post.UserId?.fullname || "User"}</div>
@@ -241,9 +249,12 @@ function ProfileManagement() {
               <div className="post-content">
                 {post.PostTitle && <div className="post-title">{post.PostTitle}</div>}
                 {post.PostDescription && <div className="post-desc">{post.PostDescription}</div>}
-                {post.PostImageUrl && (
-                  <img src={post.PostImageUrl} className="post-image" alt="post" />
-                )}
+               {post.PostImageUrl && (
+  <Zoom>
+    <img src={post.PostImageUrl} className="post-image" alt="post" />
+  </Zoom>
+)}
+
               </div>
 
               <div className="post-actions">
@@ -302,11 +313,14 @@ function ProfileManagement() {
               </div>
               <div className="photo-body">
                 <div className="image-preview-wrapper">
-                  <img
-                    src={preview || "https://via.placeholder.com/120"}
-                    alt="profile"
-                    className="profile-image"
-                  />
+                  <Zoom>
+  <img
+    src={preview || "https://via.placeholder.com/120"}
+    alt="profile"
+    className="profile-image"
+  />
+</Zoom>
+
                   <label className="upload-badge" htmlFor="file-input">
                     <span className="icon"><Camera /></span>
                     <input

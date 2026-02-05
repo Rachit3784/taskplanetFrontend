@@ -464,3 +464,15 @@
     opacity: 1;
   }
 }
+
+
+/* ZOOM MODAL DARK INSTAGRAM STYLE */
+[data-rmiz-modal-overlay="visible"] {
+  background: rgba(0, 0, 0, 0.96) !important;
+  backdrop-filter: blur(8px);
+}
+
+[data-rmiz-btn-unzoom] {
+  background: #d4af7a !important;
+  border-radius: 50%;
+}

@@ -13,6 +13,8 @@
     "lucide-react": "^0.563.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-easy-crop": "^5.5.6",
+    "react-medium-image-zoom": "^5.4.0",
     "react-router-dom": "^7.13.0",
     "zustand": "^5.0.11"
   },

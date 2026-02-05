@@ -5,6 +5,10 @@ import Navbar from "../Navigation/Navbar";
 import userStore from "../../store/MyStore";
 import CommentPopup from "../Comment/CommentPopup";
 
+// ⭐ NEW
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
+
 function Home() {
   const { fetchPost ,LikePost} = userStore();
   const [localPosts, setLocalPosts] = useState([]);
@@ -17,7 +21,6 @@ function Home() {
   const LIMIT = 5;
   const [likeLoadingIds, setLikeLoadingIds] = useState({});
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-
 
   const loadPosts = useCallback(async (pageNum) => {
     setLoading(true);
@@ -39,50 +42,47 @@ function Home() {
     loadPosts(1);
   }, []);
 
-const handleLike = async (post) => {
-  if (likeLoadingIds[post._id]) return;
+  const handleLike = async (post) => {
+    if (likeLoadingIds[post._id]) return;
 
-  setLikeLoadingIds(prev => ({ ...prev, [post._id]: true }));
+    setLikeLoadingIds(prev => ({ ...prev, [post._id]: true }));
 
-  const previousLiked = post.isLiked;
-  const previousLikes = post.TotalLikes;
+    const previousLiked = post.isLiked;
+    const previousLikes = post.TotalLikes;
 
-  setLocalPosts(prev =>
-    prev.map(item =>
-      item._id === post._id
-        ? {
-            ...item,
-            isLiked: !previousLiked,
-            TotalLikes: previousLiked
-              ? previousLikes - 1
-              : previousLikes + 1,
-          }
-        : item
-    )
-  );
-
-  try {
-    const res = await LikePost(post._id);
-
-    if (!res?.success) throw new Error();
-  } catch {
     setLocalPosts(prev =>
       prev.map(item =>
         item._id === post._id
-          ? { ...item, isLiked: previousLiked, TotalLikes: previousLikes }
+          ? {
+              ...item,
+              isLiked: !previousLiked,
+              TotalLikes: previousLiked
+                ? previousLikes - 1
+                : previousLikes + 1,
+            }
           : item
       )
     );
-  } finally {
-    setLikeLoadingIds(prev => {
-      const copy = { ...prev };
-      delete copy[post._id];
-      return copy;
-    });
-  }
-};
 
-
+    try {
+      const res = await LikePost(post._id);
+      if (!res?.success) throw new Error();
+    } catch {
+      setLocalPosts(prev =>
+        prev.map(item =>
+          item._id === post._id
+            ? { ...item, isLiked: previousLiked, TotalLikes: previousLikes }
+            : item
+        )
+      );
+    } finally {
+      setLikeLoadingIds(prev => {
+        const copy = { ...prev };
+        delete copy[post._id];
+        return copy;
+      });
+    }
+  };
 
   useEffect(() => {
     if (loading || !hasMore || isLoadingMore) return;
@@ -134,47 +134,48 @@ const handleLike = async (post) => {
             <div className="post-content">
               {post.PostTitle && <div className="post-title">{post.PostTitle}</div>}
               {post.PostDescription && <div className="post-desc">{post.PostDescription}</div>}
+
+              {/* ⭐ ONLY CHANGE HERE */}
               {post.PostImageUrl && (
-                <img src={post.PostImageUrl} className="post-image" alt="post" />
+                <Zoom>
+                  <img
+                    src={post.PostImageUrl}
+                    className="post-image"
+                    alt="post"
+                  />
+                </Zoom>
               )}
             </div>
 
             <div className="post-actions">
-
-
               <button
-  disabled={likeLoadingIds[post._id]}
-  onClick={() => handleLike(post)}
-  className={`action-btn ${post.isLiked ? "liked" : ""}`}
->
-  <Heart
-    size={16}
-    fill={post.isLiked ? "red" : "none"}
-    color={post.isLiked ? "red" : "currentColor"}
-    strokeWidth={2}
-  />
-  <span>{post.TotalLikes || 0}</span>
-</button>
+                disabled={likeLoadingIds[post._id]}
+                onClick={() => handleLike(post)}
+                className={`action-btn ${post.isLiked ? "liked" : ""}`}
+              >
+                <Heart
+                  size={16}
+                  fill={post.isLiked ? "red" : "none"}
+                  color={post.isLiked ? "red" : "currentColor"}
+                  strokeWidth={2}
+                />
+                <span>{post.TotalLikes || 0}</span>
+              </button>
 
-
-            <button onClick={() => setCommentPostId(post._id)} className="action-btn">
-  <MessageCircle size={16}/>
-  <span>{post.TotalComments || 0}</span>
-</button>
-
-
+              <button onClick={() => setCommentPostId(post._id)} className="action-btn">
+                <MessageCircle size={16}/>
+                <span>{post.TotalComments || 0}</span>
+              </button>
             </div>
           </div>
         ))}
 
-
         {commentPostId && (
-  <CommentPopup
-    postId={commentPostId}
-    onClose={() => setCommentPostId(null)}
-  />
-)}
-
+          <CommentPopup
+            postId={commentPostId}
+            onClose={() => setCommentPostId(null)}
+          />
+        )}
 
         <div ref={loaderRef} style={{ height: 0 }} />
       </div>
