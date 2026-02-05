@@ -7,6 +7,18 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+BEFORE_AFTER_COMPARISON.md
+COMPLETE_REDESIGN_DOCS.md
+DESIGN_GUIDE.md
+FINAL_SUMMARY.md
+PROJECT_COMPLETION_REPORT.md
+PROJECT_MANIFEST.md
+QUICK_REFERENCE.md
+README.md
+UI_REDESIGN_SUMMARY.md
+VISUAL_REFERENCE.md
+
+
 .env
 .env.local
 .env.*.local

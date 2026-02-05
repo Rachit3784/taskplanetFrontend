@@ -5,7 +5,7 @@ import userStore from "../../store/MyStore";
 import "./Otp.css";
 import { mycontext } from "../../store/MyContext";
 
-/* ⏳ Timer */
+
 const CountdownTimer = ({ start = 59, onComplete }) => {
   const [time, setTime] = useState(start);
 

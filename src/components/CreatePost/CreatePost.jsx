@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./CreatePost.css";
 import userStore from "../../store/MyStore";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ImagePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
@@ -21,16 +21,14 @@ const CreatePost = () => {
   };
 
   const handleSubmit = async () => {
+    if (!title || !description) return alert("Fill all fields");
     setLoading(true);
+
     const res = await addPost(image, title, description);
     setLoading(false);
 
     if (res.success) {
       alert("Post uploaded 🚀");
-      setImage(null);
-      setPreview(null);
-      setTitle("");
-      setDescription("");
       navigate("/");
     } else {
       alert(res.message);
@@ -40,49 +38,48 @@ const CreatePost = () => {
   return (
     <div className="create-post-container">
       <div className="create-post-navbar">
-        <button className="nav-back-btn" onClick={() => navigate(-1)} title="Go back">
-          <ArrowLeft size={20} />
+        <button className="nav-back-btn" onClick={() => navigate(-1)}>
+          <ArrowLeft size={18} />
           <span>Back</span>
         </button>
         <h1 className="nav-title">Create Post</h1>
-        <div style={{ width: 60 }}></div>
+        <div style={{ width: 60 }} />
       </div>
 
       <div className="create-post-wrapper">
         <div className="create-post-card">
-        <h2>Create Post</h2>
+          <h2>Share Something</h2>
 
-        <div className="image-upload">
           {preview ? (
             <img src={preview} alt="preview" className="preview-img" />
           ) : (
             <label className="upload-box">
-              <input type="file" accept="image/*" onChange={handleImageChange} hidden />
-              📷 Add Image
+              <ImagePlus size={22} />
+              <div>Add Image</div>
+              <input type="file" accept="image/*" hidden onChange={handleImageChange} />
             </label>
           )}
+
+          <input
+            type="text"
+            placeholder="Post Title..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="post-input"
+          />
+
+          <textarea
+            placeholder="Write something amazing..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="post-textarea"
+          />
+
+          <button onClick={handleSubmit} disabled={loading} className="post-btn">
+            {loading ? "Posting..." : "Post 🚀"}
+          </button>
         </div>
-
-        <input
-          type="text"
-          placeholder="Post Title..."
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="post-input"
-        />
-
-        <textarea
-          placeholder="Write something amazing..."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="post-textarea"
-        />
-
-        <button onClick={handleSubmit} disabled={loading} className="post-btn">
-          {loading ? "Posting..." : "Post 🚀"}
-        </button>
       </div>
-    </div>
     </div>
   );
 };

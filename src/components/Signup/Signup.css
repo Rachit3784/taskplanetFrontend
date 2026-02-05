@@ -1,127 +1,107 @@
+/* 🌑 Page Background */
 .signup-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--primary-light) 0%, var(--light-bg) 100%);
+  background: #0f0f0f;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color: #fff;
 }
 
+/* 🧱 Card */
 .signup-card {
   width: 100%;
-  max-width: 420px;
-  background: var(--white);
-  padding: 40px 32px;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(10, 102, 194, 0.1);
+  max-width: 720px;
+  background: #1a1a1a;
+  padding: 36px;
+  border-radius: 14px;
+  border: 1px solid #d4af7a;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  animation: fadeUp 0.4s ease;
 }
 
+/* 🏷 Header */
 .signup-header {
   text-align: center;
-  margin-bottom: 32px;
-}
-
-.logo-badge {
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-  margin-bottom: 16px;
-  color: var(--white);
-  box-shadow: 0 4px 12px rgba(10, 102, 194, 0.3);
+  margin-bottom: 24px;
 }
 
 .signup-header h2 {
-  margin: 16px 0 8px;
-  color: var(--primary-blue);
+  color: #d4af7a;
   font-size: 24px;
   font-weight: 700;
 }
 
 .signup-header p {
-  font-size: 14px;
-  color: var(--text-light);
+  font-size: 13px;
+  color: #8a8a8a;
 }
 
-.input-group {
-  margin-bottom: 20px;
+/* 🧩 FORM GRID */
+.signup-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 20px;
+  margin-top: 20px;
 }
 
+.gender-section,
+.signup-btn,
+.login-link {
+  grid-column: span 2;
+}
+
+/* 📝 Input Labels */
 .input-group label {
   font-size: 12px;
-  font-weight: 700;
-  color: var(--text-dark);
+  font-weight: 600;
+  margin-bottom: 6px;
   display: block;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
+/* ✨ Input Box */
 .input-wrapper {
   display: flex;
   align-items: center;
-  background: var(--light-bg);
-  border: none;
-  border-radius: 8px;
-  padding: 12px 14px;
   gap: 10px;
-  transition: all 0.2s ease;
-}
-
-.input-wrapper:focus-within {
-  background: var(--white);
-  box-shadow: 0 0 0 2px rgba(10, 102, 194, 0.15);
-  border: 1px solid var(--primary-blue);
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #252525;
+  border: 1px solid #333;
+  transition: 0.2s;
 }
 
 .input-wrapper input {
+  background: transparent;
   border: none;
   outline: none;
+  color: #fff;
   width: 100%;
   font-size: 14px;
-  font-family: inherit;
-  background: transparent;
-  color: var(--text-dark);
-}
-
-.input-wrapper input::placeholder {
-  color: var(--text-light);
 }
 
 .input-wrapper svg {
-  color: var(--primary-blue);
-  flex-shrink: 0;
+  color: #d4af7a;
 }
 
-.error-border {
-  background: rgba(204, 31, 31, 0.05);
-  box-shadow: 0 0 0 2px rgba(204, 31, 31, 0.2);
+.input-wrapper:focus-within {
+  border-color: #d4af7a;
+  box-shadow: 0 0 0 3px rgba(212, 175, 122, 0.15);
 }
 
+/* ❗ Error */
 .error-text {
   font-size: 12px;
-  color: var(--danger);
-  margin-top: 6px;
-  display: block;
+  color: #ff4d7d;
+  margin-top: 4px;
 }
 
-.gender-section {
-  margin-bottom: 20px;
-}
-
+/* 👤 Gender */
 .gender-section label {
   font-size: 12px;
-  font-weight: 700;
-  color: var(--text-dark);
-  display: block;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: 600;
 }
 
 .gender-row {
@@ -132,200 +112,72 @@
 .gender-chip {
   flex: 1;
   padding: 10px;
-  border: 1.5px solid var(--border-color);
-  background: var(--light-bg);
   border-radius: 8px;
+  background: #252525;
+  border: 1px solid #333;
+  color: #aaa;
   cursor: pointer;
-  font-size: 13px;
   font-weight: 600;
-  transition: all 0.2s ease;
-  color: var(--text-light);
+  transition: 0.2s;
 }
 
 .gender-chip:hover {
-  border-color: var(--primary-blue);
-  background: rgba(10, 102, 194, 0.05);
+  border-color: #d4af7a;
 }
 
 .gender-chip.active {
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
-  color: var(--white);
-  border-color: var(--primary-blue);
-  box-shadow: 0 4px 12px rgba(10, 102, 194, 0.3);
+  background: #d4af7a;
+  color: #1a1a1a;
+  border-color: transparent;
 }
 
-.error-small {
-  font-size: 12px;
-  color: var(--danger);
-  margin-top: 6px;
-  display: block;
-}
-
-.signup-form {
-  margin-top: 24px;
-}
-
+/* 🚀 Button */
 .signup-btn {
-  width: 100%;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
-  color: var(--white);
-  border: none;
-  padding: 12px;
+  margin-top: 10px;
+  padding: 13px;
   border-radius: 8px;
+  border: none;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 20px;
-  transition: all 0.2s ease;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  background: #d4af7a;
+  color: #1a1a1a;
+  transition: 0.2s;
+  box-shadow: 0 6px 20px rgba(212, 175, 122, 0.3);
 }
 
-.signup-btn:hover:not(:disabled) {
+.signup-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(10, 102, 194, 0.4);
+  background: #e5c896;
 }
 
-.signup-btn:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.signup-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
+/* 🔗 Login Link */
 .login-link {
   text-align: center;
-  margin-top: 16px;
   font-size: 13px;
-  color: var(--text-light);
+  color: #8a8a8a;
+  margin-top: 14px;
 }
 
 .login-link span {
-  color: var(--primary-blue);
+  color: #d4af7a;
   font-weight: 700;
   cursor: pointer;
-  transition: color 0.2s ease;
 }
 
-.login-link span:hover {
-  color: var(--primary-dark);
-}
-
-@media (max-width: 480px) {
-  .signup-card {
-    padding: 32px 20px;
-    margin: 20px;
+/* 📱 Responsive */
+@media (max-width: 600px) {
+  .signup-form {
+    grid-template-columns: 1fr;
   }
-
-  .logo-badge {
-    width: 56px;
-    height: 56px;
-  }
-
-  .signup-header h2 {
-    font-size: 20px;
-  }
-
-  .input-wrapper {
-    padding: 10px 12px;
-  }
-
-  .gender-row {
-    gap: 6px;
-  }
-
-  .gender-chip {
-    padding: 8px;
-    font-size: 12px;
-  }
-
-  .signup-btn {
-    padding: 11px;
-    font-size: 13px;
-    margin-top: 16px;
-  }
-
+  .gender-section,
+  .signup-btn,
   .login-link {
-    font-size: 12px;
+    grid-column: span 1;
   }
 }
 
-@media (max-width: 360px) {
-  .signup-card {
-    padding: 24px 16px;
-  }
-
-  .logo-badge {
-    width: 48px;
-    height: 48px;
-  }
-
-  .signup-header h2 {
-    font-size: 18px;
-    margin: 12px 0 4px;
-  }
-
-  .signup-header p {
-    font-size: 12px;
-  }
-
-  .input-group label {
-    font-size: 11px;
-    margin-bottom: 6px;
-  }
-
-  .input-wrapper {
-    padding: 9px 10px;
-    gap: 8px;
-  }
-
-  .input-wrapper input {
-    font-size: 13px;
-  }
-
-  .gender-section label {
-    font-size: 11px;
-  }
-
-  .gender-row {
-    gap: 5px;
-  }
-
-  .gender-chip {
-    padding: 7px;
-    font-size: 11px;
-  }
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-  .signup-card {
-    max-width: 100%;
-  }
-
-  .signup-header {
-    margin-bottom: 28px;
-  }
-}
-
-@media (min-width: 769px) {
-  .signup-card {
-    animation: slideIn 0.3s ease;
-  }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ✨ Animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
