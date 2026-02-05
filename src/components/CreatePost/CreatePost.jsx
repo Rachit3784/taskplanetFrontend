@@ -27,7 +27,7 @@ const CreatePost = () => {
     { label: "4:5", value: 4 / 5 },
     { label: "16:9", value: 16 / 9 },
     { label: "3:4", value: 3 / 4 },
-    { label: "Original", value: null },
+    { label: "Original", value: 16 / 10},
   ];
 
   const handleImageChange = (e) => {
