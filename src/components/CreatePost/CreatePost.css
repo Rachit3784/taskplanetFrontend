@@ -34,10 +34,6 @@
   transition: opacity 0.2s;
 }
 
-.nav-back-btn:hover {
-  opacity: 0.8;
-}
-
 .nav-title {
   font-size: 1.2rem;
   font-weight: 700;
@@ -50,7 +46,7 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Form upar se start ho */
+  align-items: flex-start;
   padding: 40px 20px;
 }
 
@@ -71,7 +67,6 @@
 .create-post-card h2 {
   text-align: center;
   color: #d4af7a;
-  margin-bottom: 10px;
 }
 
 /* ================= IMAGE UPLOAD BOX ================= */
@@ -83,99 +78,59 @@
   text-align: center;
   color: #d4af7a;
   background: rgba(212, 175, 122, 0.03);
-  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 }
 
-.upload-box:hover {
-  background: rgba(212, 175, 122, 0.08);
-  border-color: #d4af7a;
-}
-
 .preview-container {
   width: 100%;
-  text-align: center;
 }
 
 .preview-img {
   width: 100%;
   border-radius: 12px;
-  max-height: 300px;
-  object-fit: cover;
+  max-height: 400px;
+  object-fit: contain; /* Pura image dikhane ke liye contain use karein */
+  background: #000;
   border: 1px solid #d4af7a;
 }
 
-.change-img-btn {
+.preview-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.change-img-btn, .edit-crop-btn {
   background: none;
   border: 1px solid #d4af7a;
   color: #d4af7a;
   padding: 6px 12px;
   border-radius: 6px;
-  margin-top: 10px;
   cursor: pointer;
   font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-/* ================= INPUTS & TEXTAREA ================= */
-.post-input,
-.post-textarea {
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px solid #333;
-  background: #252525;
-  color: white;
-  font-size: 1rem;
-  outline: none;
-  box-sizing: border-box; /* Padding handling */
+.edit-crop-btn {
+  background: rgba(212, 175, 122, 0.1);
 }
 
-.post-input:focus,
-.post-textarea:focus {
-  border-color: #d4af7a;
-}
-
-.post-textarea {
-  min-height: 120px;
-  resize: none;
-}
-
-/* ================= SUBMIT BUTTON ================= */
-.post-btn {
-  background: linear-gradient(135deg, #d4af7a, #e5c896);
-  color: #1a1a1a;
-  padding: 15px;
-  border-radius: 10px;
-  border: none;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.post-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  filter: brightness(1.1);
-}
-
-.post-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* ================= CROP MODAL (THE FIX) ================= */
+/* ================= CROP MODAL ================= */
 .crop-modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.98);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000; /* Isse sabse upar hona chahiye */
-  padding: 15px;
+  z-index: 2000;
+  padding: 10px;
 }
 
 .crop-container {
@@ -187,49 +142,62 @@
   border: 1px solid #d4af7a;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
-.crop-container h3 {
-  margin: 0;
-  text-align: center;
-  color: #d4af7a;
-  font-size: 1.1rem;
-}
-
-/* Cropper Wrapper - Yahan position relative hona compulsory hai */
 .cropper-wrapper {
   position: relative; 
   width: 100%;
-  height: 300px; /* Cropper ki height fix */
+  height: 320px;
   background: #000;
   border-radius: 12px;
   overflow: hidden;
 }
 
-/* Zoom Slider Styling */
+/* Aspect Ratio Buttons */
+.aspect-ratio-selector {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 5px 0;
+}
+
+.ratio-btn {
+  background: #252525;
+  color: #888;
+  border: 1px solid #333;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ratio-btn:hover {
+  border-color: #d4af7a;
+  color: #d4af7a;
+}
+
+.ratio-btn.active {
+  background: #d4af7a;
+  color: #1a1a1a;
+  border-color: #d4af7a;
+  font-weight: 600;
+}
+
 .zoom-control {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 0 10px;
+  gap: 5px;
 }
 
-.zoom-control label {
-  color: #d4af7a;
-  font-size: 0.9rem;
-}
+.zoom-control label { color: #d4af7a; font-size: 0.8rem; }
+.zoom-control input { accent-color: #d4af7a; }
 
-.zoom-control input[type="range"] {
-  width: 100%;
-  accent-color: #d4af7a;
-  cursor: pointer;
-}
-
-/* Crop Buttons */
 .crop-actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;
 }
 
 .crop-btn {
@@ -237,32 +205,37 @@
   padding: 12px;
   border-radius: 8px;
   font-weight: 700;
-  border: none;
   cursor: pointer;
-  font-size: 0.9rem;
+  border: none;
 }
 
-.crop-btn.cancel {
-  background: #333;
+.crop-btn.cancel { background: #333; color: white; }
+.crop-btn.done { background: #d4af7a; color: #1a1a1a; }
+
+/* ================= INPUTS & SUBMIT ================= */
+.post-input, .post-textarea {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  background: #252525;
   color: white;
+  box-sizing: border-box;
 }
 
-.crop-btn.done {
-  background: #d4af7a;
+.post-textarea { min-height: 100px; resize: none; }
+
+.post-btn {
+  background: linear-gradient(135deg, #d4af7a, #e5c896);
   color: #1a1a1a;
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-/* ================= MOBILE ADAPTATION ================= */
 @media (max-width: 480px) {
-  .create-post-card {
-    padding: 20px;
-  }
-  
-  .cropper-wrapper {
-    height: 250px;
-  }
-
-  .crop-container {
-    padding: 15px;
-  }
+  .cropper-wrapper { height: 280px; }
+  .crop-container { padding: 15px; }
 }

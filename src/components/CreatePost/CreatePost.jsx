@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import "./CreatePost.css";
 import userStore from "../../store/MyStore";
-import { ArrowLeft, ImagePlus } from "lucide-react";
+import { ArrowLeft, ImagePlus, Crop } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Cropper from "react-easy-crop";
 
@@ -15,10 +15,20 @@ const CreatePost = () => {
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Crop States
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
+  const [aspect, setAspect] = useState(1); // Default 1:1
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [showCrop, setShowCrop] = useState(false);
+
+  const aspectRatios = [
+    { label: "1:1", value: 1 },
+    { label: "4:5", value: 4 / 5 },
+    { label: "16:9", value: 16 / 9 },
+    { label: "3:4", value: 3 / 4 },
+    { label: "Original", value: null },
+  ];
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -79,7 +89,7 @@ const CreatePost = () => {
   };
 
   const handleSubmit = async () => {
-    if (!title || !description || !image) return alert("Fill all fields and add image");
+    if (!title && !description && !image) return alert("Fill all fields and add image");
     setLoading(true);
 
     const res = await addPost(image, title, description);
@@ -108,21 +118,34 @@ const CreatePost = () => {
         <div className="create-post-card">
           <h2>Share Something</h2>
 
-          {/* --- CROP MODAL START --- */}
           {preview && showCrop && (
             <div className="crop-modal">
               <div className="crop-container">
-                <h3>Crop Your Image</h3>
+                <h3>Adjust Dimensions</h3>
+                
                 <div className="cropper-wrapper">
                   <Cropper
                     image={preview}
                     crop={crop}
                     zoom={zoom}
-                    aspect={1}
+                    aspect={aspect}
                     onCropChange={setCrop}
                     onZoomChange={setZoom}
                     onCropComplete={onCropComplete}
                   />
+                </div>
+
+                {/* --- DIMENSION SELECTOR --- */}
+                <div className="aspect-ratio-selector">
+                   {aspectRatios.map((ratio) => (
+                     <button 
+                       key={ratio.label}
+                       className={`ratio-btn ${aspect === ratio.value ? "active" : ""}`}
+                       onClick={() => setAspect(ratio.value)}
+                     >
+                       {ratio.label}
+                     </button>
+                   ))}
                 </div>
 
                 <div className="zoom-control">
@@ -142,20 +165,24 @@ const CreatePost = () => {
                     Cancel
                   </button>
                   <button className="crop-btn done" onClick={handleCropDone}>
-                    Done
+                    Apply Crop
                   </button>
                 </div>
               </div>
             </div>
           )}
-          {/* --- CROP MODAL END --- */}
 
           {!showCrop && (
             <>
               {preview ? (
                 <div className="preview-container">
                   <img src={preview} alt="preview" className="preview-img" />
-                  <button className="change-img-btn" onClick={() => setPreview(null)}>Change Image</button>
+                  <div className="preview-actions">
+                    <button className="edit-crop-btn" onClick={() => setShowCrop(true)}>
+                      <Crop size={14} /> Recrop
+                    </button>
+                    <button className="change-img-btn" onClick={() => setPreview(null)}>Change Image</button>
+                  </div>
                 </div>
               ) : (
                 <label className="upload-box">
