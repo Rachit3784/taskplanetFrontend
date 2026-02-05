@@ -1,53 +1,36 @@
-import { useContext, useEffect, useState } from "react";
-
-import { mycontext } from "./store/MyContext"; 
+import { useContext, useEffect } from "react";
+import { mycontext } from "./store/MyContext";
 import Router from "./Router";
 import userStore from "./store/MyStore";
 import Loading from "./Loading/Loading";
 
-
- // Needed for nested routes
-
 function App() {
-  const [isLoading ,setIsLoading] = useState(false)
-   const {loginWithToken} = userStore();
-  const { isLoggedIn ,  setIsLoggedIn} = useContext(mycontext);
-   
-  const logWithCookie = async ()=>{
-    setIsLoading(true);
-    try{
-    
+  const { loginWithToken } = userStore();
+  const { setIsLoggedIn, isAuthChecking, setIsAuthChecking } = useContext(mycontext);
 
-      const res = await loginWithToken();
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await loginWithToken();
 
-      if(res.success){
-      setIsLoggedIn(true);
-      }else{
-             setIsLoggedIn(false);
+        if (res.success) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (err) {
+        setIsLoggedIn(false);
+      } finally {
+        setIsAuthChecking(false); // ⭐ AUTH CHECK DONE
       }
-      
+    };
 
-    }catch(error){
-      console.log(error)
-    }finally{
-      setIsLoading(false)
-    }
-  }
-  useEffect(()=>{
-  logWithCookie();
-  },[]);
-  
-  return (
-   <div>
-     {
-      isLoading ? (<div>
-        <Loading/>
-      </div> ) : (
-        <Router/>
-      )
-     }
-   </div>
-  );
+    checkAuth();
+  }, []);
+
+  if (isAuthChecking) return <Loading />;
+
+  return <Router />;
 }
 
 export default App;

@@ -10,12 +10,10 @@ createRoot(document.getElementById('root')).render(
     
 <BrowserRouter>
 <MyContextProvider>
+
     <App />
     </MyContextProvider>
-
     </BrowserRouter>
-
     
-
   </StrictMode>,
 )

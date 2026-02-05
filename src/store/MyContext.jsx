@@ -2,14 +2,13 @@ import { createContext, useState } from "react";
 
 export const mycontext = createContext();
 
-export const MyContextProvider = ({children})=>{
-    const [isLoggedIn , setIsLoggedIn] = useState(false);
+export const MyContextProvider = ({ children }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuthChecking, setIsAuthChecking] = useState(true); // ⭐ NEW
 
-     const contextObj = {isLoggedIn,setIsLoggedIn}
-
-    return (
-        <mycontext.Provider value={contextObj}>
-            {children}
-        </mycontext.Provider>
-    )
-}
+  return (
+    <mycontext.Provider value={{ isLoggedIn, setIsLoggedIn, isAuthChecking, setIsAuthChecking }}>
+      {children}
+    </mycontext.Provider>
+  );
+};
