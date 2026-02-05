@@ -47,7 +47,7 @@ function Router() {
       )}
 
       {/* Fallback */}
-      <Route path="*" element={<Navigate to={isLoggedIn ? "/" : "/auth/login"} />} />
+      <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/auth/login"} />} />
     </Routes>
 
   )

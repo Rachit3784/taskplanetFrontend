@@ -1,0 +1,96 @@
+/* 🌌 Full Screen Background */
+.loading-screen {
+  height: 100vh;
+  width: 100%;
+  background: #0f0f0f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* 🔲 Center Wrapper */
+.loader-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* 💍 Rotating Gold Rings */
+.gold-ring {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top: 2px solid #d4af7a;
+  border-right: 2px solid #d4af7a;
+  animation: spin 2.4s linear infinite;
+}
+
+.ring-2 {
+  width: 100px;
+  height: 100px;
+  border-top: 2px solid #e5c896;
+  border-right: 2px solid #e5c896;
+  animation-duration: 1.8s;
+  animation-direction: reverse;
+}
+
+/* ✨ Brand Text */
+.brand-text {
+  text-align: center;
+  z-index: 2;
+}
+
+.brand-main {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #d4af7a;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.brand-sub {
+  font-size: 12px;
+  color: #8a8a8a;
+  letter-spacing: 1px;
+}
+
+/* 🌟 Glow Effect */
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px rgba(212, 175, 122, 0.3);
+  }
+  to {
+    text-shadow: 0 0 18px rgba(212, 175, 122, 0.6);
+  }
+}
+
+/* 🔄 Rotation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 📱 Responsive */
+@media (max-width: 480px) {
+  .gold-ring {
+    width: 110px;
+    height: 110px;
+  }
+
+  .ring-2 {
+    width: 80px;
+    height: 80px;
+  }
+
+  .brand-main {
+    font-size: 16px;
+  }
+}

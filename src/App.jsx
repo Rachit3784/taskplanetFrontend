@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { mycontext } from "./store/MyContext"; 
 import Router from "./Router";
 import userStore from "./store/MyStore";
+import Loading from "./Loading/Loading";
 
 
  // Needed for nested routes
@@ -40,7 +41,7 @@ function App() {
    <div>
      {
       isLoading ? (<div>
-        <p>Loading ....</p>
+        <Loading/>
       </div> ) : (
         <Router/>
       )
