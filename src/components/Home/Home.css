@@ -111,9 +111,10 @@
 
 .post-image {
   width: 100%;
+  height: 100%;
   border-radius: 16px;
   margin-bottom: 12px;
-  max-height: 400px;
+  max-height: 650px;
   object-fit: cover;
   cursor: pointer;
   transition: opacity 0.15s ease;
