@@ -276,6 +276,8 @@ fetchPost: async (page = 1, limit = 10) => {
     const { userModelID } = get();
     const token = getToken();
 
+
+    console.log(page,"lllllllllll")
     const response = await fetch(
       `${BASE_URL}/post/fetch-posts?page=${page}&limit=${limit}&userId=${userModelID}`,
       {

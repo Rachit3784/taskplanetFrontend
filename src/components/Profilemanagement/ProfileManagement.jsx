@@ -1,15 +1,26 @@
 import React, { useState, useEffect, useRef, useCallback, useContext } from "react";
 import "./Profilemanagement.css";
 import userStore from "../../store/MyStore";
-import { Camera, Heart, MessageCircle, LogOut, Trash2, ArrowLeft } from "lucide-react";
+import { Camera, Heart, MessageCircle, LogOut, Trash2, ArrowLeft, X } from "lucide-react"; 
 import Navbar from "../Navigation/Navbar";
 import CommentPopup from "../Comment/CommentPopup";
 import { useNavigate } from "react-router-dom";
 import { mycontext } from "../../store/MyContext";
-import Zoom from "react-medium-image-zoom";
-import "react-medium-image-zoom/dist/styles.css";
 
-
+// --- ZOOM MODAL COMPONENT ---
+const ZoomModal = ({ imageUrl, onClose }) => {
+  if (!imageUrl) return null;
+  return (
+    <div className="zoom-overlay" onClick={onClose}>
+      <div className="zoom-content" onClick={(e) => e.stopPropagation()}>
+        <button className="zoom-close" onClick={onClose}>
+          <X size={30} />
+        </button>
+        <img src={imageUrl} alt="Zoomed View" className="zoomed-image" />
+      </div>
+    </div>
+  );
+};
 
 function ProfileManagement() {
   const navigate = useNavigate();
@@ -26,7 +37,6 @@ function ProfileManagement() {
     logout,
   } = userStore();
 
-  // Profile management state
   const [name, setName] = useState(userName || "");
   const [mobile, setMobile] = useState(userMobileNum || "");
   const [image, setImage] = useState(null);
@@ -34,7 +44,6 @@ function ProfileManagement() {
   const [loadingPhoto, setLoadingPhoto] = useState(false);
   const [loadingInfo, setLoadingInfo] = useState(false);
 
-  // Posts fetching state
   const [localPosts, setLocalPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -42,52 +51,74 @@ function ProfileManagement() {
   const [commentPostId, setCommentPostId] = useState(null);
   const [likeLoadingIds, setLikeLoadingIds] = useState({});
   const [deleteLoadingIds, setDeleteLoadingIds] = useState({});
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [zoomedImg, setZoomedImg] = useState(null);
 
   const loaderRef = useRef(null);
   const LIMIT = 5;
 
+  // --- POST LOADING LOGIC ---
   const loadPosts = useCallback(async (pageNum) => {
+    if (loading) return;
     setLoading(true);
-    const res = await fetchMyPost(pageNum, LIMIT);
-
-    if (res?.success) {
-      const fetchedPosts = res.posts || [];
-
-      setLocalPosts((prev) =>
-        pageNum === 1 ? fetchedPosts : [...prev, ...fetchedPosts]
-      );
-
-      if (fetchedPosts.length < LIMIT) {
-        setHasMore(false);
+    try {
+      const res = await fetchMyPost(pageNum, LIMIT);
+      if (res?.success) {
+        const fetchedPosts = res.posts || [];
+        setLocalPosts((prev) => (pageNum === 1 ? fetchedPosts : [...prev, ...fetchedPosts]));
+        if (fetchedPosts.length < LIMIT) {
+          setHasMore(false);
+        }
       }
+    } catch (err) {
+      console.error("Fetch posts failed", err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, [fetchMyPost]);
 
+  // Initial Load
   useEffect(() => {
     loadPosts(1);
   }, []);
 
-  // Handle like functionality
+  // --- SCROLLING OBSERVER ---
+  useEffect(() => {
+    const currentLoader = loaderRef.current;
+    if (!currentLoader || !hasMore || loading) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          setPage((prev) => prev + 1);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(currentLoader);
+    return () => observer.disconnect();
+  }, [hasMore, loading]);
+
+  // Load next page when page state changes
+  useEffect(() => {
+    if (page > 1) {
+      loadPosts(page);
+    }
+  }, [page]);
+
   const handleLike = async (post) => {
     if (likeLoadingIds[post._id]) return;
-
     setLikeLoadingIds((prev) => ({ ...prev, [post._id]: true }));
-
     const previousLiked = post.isLiked;
     const previousLikes = post.TotalLikes;
 
-    // Optimistic UI
     setLocalPosts((prev) =>
       prev.map((item) =>
         item._id === post._id
           ? {
               ...item,
               isLiked: !previousLiked,
-              TotalLikes: previousLiked
-                ? previousLikes - 1
-                : previousLikes + 1,
+              TotalLikes: previousLiked ? previousLikes - 1 : previousLikes + 1,
             }
           : item
       )
@@ -95,10 +126,8 @@ function ProfileManagement() {
 
     try {
       const res = await LikePost(post._id);
-
       if (!res?.success) throw new Error();
     } catch {
-      // Revert if API fails
       setLocalPosts((prev) =>
         prev.map((item) =>
           item._id === post._id
@@ -115,34 +144,6 @@ function ProfileManagement() {
     }
   };
 
-  // Infinite scroll observer
-  useEffect(() => {
-    if (loading || !hasMore || isLoadingMore) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
-          setIsLoadingMore(true);
-          setPage((prev) => prev + 1);
-        }
-      },
-      { threshold: 1.0 }
-    );
-
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [loading, hasMore, isLoadingMore]);
-
-  useEffect(() => {
-    if (page > 1 && !loading && !isLoadingMore) {
-      loadPosts(page);
-      setIsLoadingMore(false);
-    }
-  }, [page, loadPosts, loading, isLoadingMore]);
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -157,7 +158,7 @@ function ProfileManagement() {
       setLoadingPhoto(true);
       const res = await updateProfilePhoto(image);
       alert(res.msg || "Profile picture updated!");
-      setImage(null); // Reset file state after success
+      setImage(null);
     } catch (err) {
       alert("Upload failed");
     } finally {
@@ -169,10 +170,7 @@ function ProfileManagement() {
     try {
       setLoadingInfo(true);
       const res = await updateDetails(name, mobile);
-      if(res.success){
- alert(res.msg || "Personal details updated!");
-      }
-     
+      if(res.success) alert(res.msg || "Personal details updated!");
     } catch (err) {
       alert("Update failed");
     } finally {
@@ -188,8 +186,6 @@ function ProfileManagement() {
         if (res.success) {
           setLocalPosts((prev) => prev.filter((post) => post._id !== postId));
           alert("Post deleted successfully");
-        } else {
-          alert(res.message || "Failed to delete post");
         }
       } catch (err) {
         alert("Error deleting post");
@@ -226,20 +222,16 @@ function ProfileManagement() {
       </div>
 
       <div className="profile-main-wrapper">
-        {/* LEFT SIDE: POSTS FEED */}
         <div className="profile-feed">
           {localPosts.map((post, index) => (
             <div key={post._id || index} className="post-card">
               <div className="post-header">
-                
-               <Zoom>
-  <img
-    src={post.UserId?.profile || "https://via.placeholder.com/32"}
-    className="user-pic"
-    alt="user"
-  />
-</Zoom>
-
+                <img
+                  src={post.UserId?.profile || "https://via.placeholder.com/32"}
+                  className="user-pic cursor-pointer"
+                  alt="user"
+                  onClick={() => setZoomedImg(post.UserId?.profile)}
+                />
                 <div className="user-info">
                   <div className="username">@{post.UserId?.username || "anonymous"}</div>
                   <div className="fullname">{post.UserId?.fullname || "User"}</div>
@@ -249,12 +241,14 @@ function ProfileManagement() {
               <div className="post-content">
                 {post.PostTitle && <div className="post-title">{post.PostTitle}</div>}
                 {post.PostDescription && <div className="post-desc">{post.PostDescription}</div>}
-               {post.PostImageUrl && (
-  <Zoom>
-    <img src={post.PostImageUrl} className="post-image" alt="post" />
-  </Zoom>
-)}
-
+                {post.PostImageUrl && (
+                  <img 
+                    src={post.PostImageUrl} 
+                    className="post-image cursor-pointer" 
+                    alt="post" 
+                    onClick={() => setZoomedImg(post.PostImageUrl)}
+                  />
+                )}
               </div>
 
               <div className="post-actions">
@@ -263,76 +257,55 @@ function ProfileManagement() {
                   onClick={() => handleLike(post)}
                   className={`action-btn ${post.isLiked ? "liked" : ""}`}
                 >
-                  <Heart
-                    size={16}
-                    fill={post.isLiked ? "currentColor" : "none"}
-                    strokeWidth={2}
-                  />
+                  <Heart size={16} fill={post.isLiked ? "currentColor" : "none"} strokeWidth={2} />
                   <span>{post.TotalLikes || 0}</span>
                 </button>
-
                 <button onClick={() => setCommentPostId(post._id)} className="action-btn">
                   <MessageCircle size={16} />
                   <span>{post.TotalComments || 0}</span>
                 </button>
-
                 <button
                   disabled={deleteLoadingIds[post._id]}
                   onClick={() => handleDeletePost(post._id)}
                   className="action-btn delete-btn-action"
-                  title="Delete post"
                 >
                   <Trash2 size={16} />
                 </button>
               </div>
             </div>
           ))}
-
-          {commentPostId && (
-            <CommentPopup
-              postId={commentPostId}
-              onClose={() => setCommentPostId(null)}
-            />
-          )}
-
-          <div ref={loaderRef} style={{ height: 0 }} />
+          
+          {/* LOADER DIV - Important for Pagination */}
+          <div ref={loaderRef} className="pagination-loader-profile">
+             {loading && hasMore && <p>Loading more posts...</p>}
+             {!hasMore && localPosts.length > 0 && <p>No more posts to show</p>}
+          </div>
         </div>
 
-        {/* RIGHT SIDE: PROFILE MANAGEMENT */}
         <div className="profile-wrapper">
           <div className="profile-container">
             <div className="settings-header">
-              <h1 className="page-title">Account Settings</h1>
+              <h1 className="page-title" style={{color : '#fff'}}>Account Settings</h1>
             </div>
 
-            {/* SECTION 1: PHOTO UPDATION */}
             <div className="settings-card">
               <div className="card-header">
                 <h3>Profile Picture</h3>
-                <p>Update your avatar and public photo.</p>
               </div>
               <div className="photo-body">
                 <div className="image-preview-wrapper">
-                  <Zoom>
-  <img
-    src={preview || "https://via.placeholder.com/120"}
-    alt="profile"
-    className="profile-image"
-  />
-</Zoom>
-
+                  <img
+                    src={preview || "https://via.placeholder.com/120"}
+                    alt="profile"
+                    className="profile-image cursor-pointer"
+                    onClick={() => setZoomedImg(preview)}
+                  />
                   <label className="upload-badge" htmlFor="file-input">
                     <span className="icon"><Camera /></span>
-                    <input
-                      id="file-input"
-                      type="file"
-                      onChange={handleImageChange}
-                      accept="image/*"
-                    />
+                    <input id="file-input" type="file" onChange={handleImageChange} accept="image/*" />
                   </label>
                 </div>
                 <div className="photo-actions">
-                  {image && <p className="file-name-hint">New file selected</p>}
                   <button
                     className="btn-update photo-btn"
                     onClick={handlePhotoUpdate}
@@ -344,46 +317,36 @@ function ProfileManagement() {
               </div>
             </div>
 
-            {/* SECTION 2: INFO UPDATION */}
             <div className="settings-card">
               <div className="card-header">
                 <h3>Personal Information</h3>
-                <p>Update your name and contact details.</p>
               </div>
               <div className="info-body">
                 <div className="input-group">
                   <label>Full Name</label>
-                  <input
-                    type="text"
-                    value={name}
-                    placeholder="John Doe"
-                    onChange={(e) => setName(e.target.value)}
-                  />
+                  <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
-
                 <div className="input-group">
                   <label>Mobile Number</label>
-                  <input
-                    type="text"
-                    value={mobile}
-                    placeholder="+91 0000000000"
-                    onChange={(e) => setMobile(e.target.value)}
-                  />
+                  <input type="text" value={mobile} onChange={(e) => setMobile(e.target.value)} />
                 </div>
-
-                <button
-                  className="btn-update info-btn"
-                  onClick={handleInfoUpdate}
-                  disabled={loadingInfo}
-                >
-                  {loadingInfo ? "Saving Details..." : "Save Changes"}
+                <button className="btn-update info-btn" onClick={handleInfoUpdate} disabled={loadingInfo}>
+                  {loadingInfo ? "Saving..." : "Save Changes"}
                 </button>
               </div>
             </div>
           </div>
         </div>
+
       </div>
+
+      {commentPostId && (
+        <CommentPopup postId={commentPostId} onClose={() => setCommentPostId(null)} />
+      )}
+      <ZoomModal imageUrl={zoomedImg} onClose={() => setZoomedImg(null)} />
     </div>
+
+    
   );
 }
 

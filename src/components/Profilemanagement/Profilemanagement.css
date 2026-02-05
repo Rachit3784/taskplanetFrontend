@@ -1,11 +1,9 @@
 .profile-container-full {
   background: #0f0f0f;
- height: 100vh;
-  background: #1a1a1a;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  min-height: 100vh;
 }
 
 .profile-navbar {
@@ -15,15 +13,12 @@
   height: 56px;
   background: #1a1a1a;
   border-bottom: 1px solid #d4af7a;
-  box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  gap: 16px;
   width: 100%;
-  backface-visibility: hidden;
-  will-change: auto;
+  box-sizing: border-box;
 }
 
 .nav-back-btn {
@@ -36,14 +31,12 @@
   font-weight: 600;
   cursor: pointer;
   font-size: 13px;
-  transition: all 0.15s ease;
   padding: 6px 12px;
   border-radius: 8px;
 }
 
 .nav-back-btn:hover {
   background: rgba(212, 175, 122, 0.1);
-  color: #e5c896;
 }
 
 .nav-title {
@@ -67,17 +60,6 @@
   font-weight: 600;
   cursor: pointer;
   font-size: 13px;
-  transition: all 0.15s ease;
-}
-
-.nav-logout-btn:hover {
-  background: #e5c896;
-}
-
-.nav-div {
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 .profile-main-wrapper {
@@ -86,645 +68,244 @@
   gap: 20px;
   padding: 20px;
   max-width: 1200px;
-  margin: 0 auto;
-  flex: 1;
-  margin-top: 56px;
-  padding-top: 20px;
-}
-
-.profile-wrapper {
-  background: transparent;
-  display: flex;
-  justify-content: flex-start;
-  position: static;
-  height: fit-content;
-  order: -1;
-}
-
-.profile-feed {
-  max-width: 100%;
-  overflow-y: auto;
-    scrollbar-width: none;
-    
-  max-height: calc(100vh - 76px);
-  padding-right: 12px;
-  backface-visibility: hidden;
-}
-
-.profile-container {
+  margin: 56px auto 0 auto;
   width: 100%;
-  max-width: 400px;
-  background: transparent;
+  box-sizing: border-box;
 }
 
-.settings-header {
+/* LEFT SIDE: FEED */
+.profile-feed {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+  flex-direction: column;
   gap: 12px;
+  /* FIXED: Remove max-height and overflow to allow window scrolling pagination */
+  height: auto;
+  overflow: visible;
 }
 
+/* RIGHT SIDE: PROFILE BOX */
+.profile-wrapper {
+  position: sticky;
+  top: 76px;
+  height: fit-content;
+  order: 2; /* Desktop par right side rahega */
+}
+
+/* POST CARD STYLING */
+.post-card {
+  background: #1a1a1a;
+  padding: 16px 20px;
+  border-bottom: 1px solid #d4af7a;
+  transition: background 0.2s;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.user-pic {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #333;
+}
+
+.username {
+  font-weight: 700;
+  color: #fff;
+  font-size: 15px;
+}
+
+.fullname {
+  color: #8a8a8a;
+  font-size: 13px;
+}
+
+.post-title {
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.post-desc {
+  color: #ccc;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.post-image {
+  width: 100%;
+  border-radius: 8px;
+  max-height: 500px;
+  object-fit: cover;
+}
+
+.post-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(212, 175, 122, 0.1);
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  color: #8a8a8a;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.action-btn.liked { color: #ff4d7d; }
+.delete-btn-action { color: #ff4d7d; }
+
+/* SETTINGS CARD */
 .settings-card {
   background: #1a1a1a;
-  border-radius: 0;
   padding: 24px;
-  margin-bottom: 20px;
-  box-shadow: none;
-  border: none;
   border-bottom: 1px solid #d4af7a;
-  transition: background-color 0.15s ease;
-  backface-visibility: hidden;
-  will-change: auto;
-}
-
-.card-header {
-  margin-bottom: 20px;
 }
 
 .card-header h3 {
-  margin: 0;
-  font-size: 16px;
   color: #d4af7a;
-  font-weight: 700;
-}
-
-.card-header p {
-  margin: 4px 0 0;
-  font-size: 13px;
-  color: #8a8a8a;
-}
-
-/* Photo Section */
-.photo-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
+  margin-bottom: 15px;
 }
 
 .image-preview-wrapper {
   position: relative;
   width: 100px;
   height: 100px;
+  margin: 0 auto 15px;
 }
 
 .profile-image {
   width: 100%;
   height: 100%;
   border-radius: 50%;
+  border: 3px solid #d4af7a;
   object-fit: cover;
-  border: 4px solid #d4af7a;
+}
+.upload-badge input[type="file"] {
+  display: none; /* Yeh default "Choose File" text ko gayab kar dega */
+}
+.upload-badge:hover {
+  transform: scale(1.1);
+  background: #e5c896;
+}
+
+.upload-badge svg {
+  color: #1a1a1a; /* Camera icon color */
 }
 
 .upload-badge {
   position: absolute;
   bottom: 0;
   right: 0;
+  align-items: center;
+  justify-content:  center;
+  display: flex;
   background: #d4af7a;
-  color: #1a1a1a;
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   cursor: pointer;
-  border: 2px solid #1a1a1a;
-  transition: all 0.15s ease;
-  box-shadow: 0 4px 12px rgba(212, 175, 122, 0.3);
 }
 
-.upload-badge:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(212, 175, 122, 0.4);
-}
-
-.upload-badge input {
-  display: none;
-}
-
-.file-name-hint {
-  font-size: 12px;
-  color: #26c281;
-  text-align: center;
-  margin-top: 4px;
-  font-weight: 600;
-}
-
-/* Input Section */
 .input-group {
-  margin-bottom: 16px;
+  margin-bottom: 15px;
 }
 
 .input-group label {
   display: block;
-  font-size: 13px;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 6px;
+  color: #fff;
+  font-size: 12px;
+  margin-bottom: 5px;
 }
 
 .input-group input {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #333333;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: all 0.15s ease;
-  box-sizing: border-box;
-  font-family: inherit;
   background: #252525;
-  color: #ffffff;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 6px;
 }
 
-.input-group input:focus {
-  outline: none;
-  border-color: #d4af7a;
-  box-shadow: 0 0 0 3px rgba(212, 175, 122, 0.1);
-}
-
-/* Buttons */
 .btn-update {
   width: 100%;
   padding: 10px;
-  border-radius: 8px;
-  border: none;
-  font-weight: 700;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  font-weight: 700;
+  border: none;
+}
+
+.info-btn { background: #d4af7a; color: #1a1a1a; }
+.photo-btn { background: transparent; border: 1px solid #d4af7a; color: #d4af7a; }
+
+/* NEW: PAGINATION LOADER */
+.pagination-loader-profile {
+  width: 100%;
+  text-align: center;
+  padding: 30px 0;
+  color: #8a8a8a;
   font-size: 14px;
 }
 
-.photo-btn {
-  background: transparent;
-  color: #d4af7a;
-  border: 1px solid #d4af7a;
+/* ZOOM MODAL */
+.zoom-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9);
+  z-index: 2000;
+  display: flex; justify-content: center; align-items: center;
+  backdrop-filter: blur(5px);
 }
 
-.photo-btn:hover {
-  background: rgba(212, 175, 122, 0.1);
-  color: #e5c896;
+.zoomed-image {
+  max-width: 90%;
+  max-height: 85vh;
+  border-radius: 8px;
+  animation: zoomIn 0.2s ease-out;
 }
 
-.info-btn {
-  background: #d4af7a;
-  color: #1a1a1a;
-  margin-top: 12px;
-  box-shadow: 0 4px 12px rgba(212, 175, 122, 0.3);
+@keyframes zoomIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
-.info-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 175, 122, 0.4);
+.zoom-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  color: #fff; background: none; border: none; cursor: pointer;
 }
 
-.btn-update:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Delete Button */
-.delete-btn-action {
-  color: #ff4d7d !important;
-  flex: 0 !important;
-  padding: 8px 10px !important;
-}
-
-.delete-btn-action:hover {
-  background: rgba(255, 77, 125, 0.1) !important;
-  color: #ff4d7d !important;
-}
-
-/* Responsive Design */
-@media (max-width: 1280px) {
-  .profile-main-wrapper {
-    grid-template-columns: 380px 1fr;
-    gap: 16px;
-    padding: 16px;
-  }
-
-  .profile-wrapper {
-    top: 60px;
-  }
-
-  .profile-feed {
-    max-height: calc(100vh - 90px);
-  }
-}
-
+/* RESPONSIVE */
 @media (max-width: 1024px) {
   .profile-main-wrapper {
     grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 16px;
   }
-
   .profile-wrapper {
     position: static;
-    height: auto;
-    justify-content: center;
-    order: 2;
+    order: 1; /* Settings upar aa jayenge mobile par */
   }
-
   .profile-feed {
-    max-height: none;
-    max-width: 100%;
-    overflow-y: visible;
-    order: 3;
-  }
-
-  .profile-container {
-    max-width: 100%;
-    min-width: 300px;
-  }
-
-  .profile-main-wrapper {
-    min-height: auto;
-  }
-}
-
-@media (max-width: 768px) {
-  .profile-container-full {
-    min-height: 100vh;
-  }
-
-  .profile-navbar {
-    padding: 0 12px;
-  }
-
-  .nav-back-btn {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
-
-  .nav-title {
-    font-size: 16px;
-  }
-
-  .nav-logout-btn {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
-
-  .back-btn-profile {
-    top: 66px;
-    left: 12px;
-    width: 36px;
-    height: 36px;
-  }
-
-  .profile-main-wrapper {
-    padding: 12px;
-    gap: 16px;
-  }
-
-  .settings-header {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 16px;
-  }
-
-  .page-title {
-    font-size: 18px;
-    width: 100%;
-  }
-
-  .logout-btn {
-    width: 100%;
-    justify-content: center;
-    padding: 10px;
-    font-size: 12px;
-  }
-
-  .settings-card {
-    padding: 18px;
-    margin-bottom: 16px;
-  }
-
-  .card-header h3 {
-    font-size: 15px;
-  }
-
-  .card-header p {
-    font-size: 12px;
-  }
-
-  .image-preview-wrapper {
-    width: 80px;
-    height: 80px;
-  }
-
-  .upload-badge {
-    width: 28px;
-    height: 28px;
-  }
-
-  .input-group input {
-    padding: 8px 10px;
-    font-size: 13px;
-  }
-
-  .btn-update {
-    padding: 9px;
-    font-size: 13px;
+    order: 2; /* Posts niche aa jayenge */
   }
 }
 
 @media (max-width: 480px) {
-  .profile-navbar {
-    padding: 0 8px;
-    height: 52px;
-  }
-
-  .nav-back-btn {
-    font-size: 11px;
-    padding: 4px 8px;
-  }
-
-  .nav-title {
-    font-size: 14px;
-  }
-
-  .nav-logout-btn {
-    font-size: 10px;
-    padding: 4px 8px;
-  }
-
-  .nav-logout-btn span {
-    display: none;
-  }
-
-  .nav-back-btn:not(:hover) span {
-    display: none;
-  }
-
-  .nav-div {
-    top: 0;
-  }
-
-  .back-btn-profile {
-    top: 66px;
-    left: 10px;
-    width: 34px;
-    height: 34px;
-  }
-
-  .profile-main-wrapper {
-    padding: 8px;
-    gap: 12px;
-    margin: 0 auto;
-    grid-template-columns: 1fr;
-  }
-
-  .profile-wrapper {
-    background: var(--light-bg);
-    order: 2;
-  }
-
-  .profile-feed {
-    order: 3;
-    max-height: none;
-    overflow-y: visible;
-    padding-right: 0;
-    padding-left: 0;
-  }
-
-  .profile-container {
-    width: 100%;
-    padding: 0;
-  }
-
-  .settings-header {
-    margin-bottom: 12px;
-  }
-
-  .page-title {
-    font-size: 16px;
-  }
-
-  .logout-btn {
-    padding: 8px 10px;
-    font-size: 11px;
-    gap: 6px;
-  }
-
-  .logout-btn svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  .settings-card {
-    padding: 14px;
-    margin-bottom: 12px;
-    border-radius: 6px;
-  }
-
-  .card-header h3 {
-    font-size: 14px;
-  }
-
-  .card-header p {
-    font-size: 11px;
-  }
-
-  .photo-body {
-    gap: 12px;
-  }
-
-  .image-preview-wrapper {
-    width: 70px;
-    height: 70px;
-  }
-
-  .profile-image {
-    border-width: 2px;
-  }
-
-  .upload-badge {
-    width: 24px;
-    height: 24px;
-    border-width: 1px;
-  }
-
-  .upload-badge svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  .file-name-hint {
-    font-size: 11px;
-  }
-
-  .input-group label {
-    font-size: 11px;
-    margin-bottom: 4px;
-  }
-
-  .input-group input {
-    padding: 8px;
-    font-size: 12px;
-  }
-
-  .btn-update {
-    padding: 8px;
-    font-size: 12px;
-  }
-
-  .photo-btn {
-    font-size: 11px;
-  }
-
-  .info-btn {
-    margin-top: 8px;
-  }
-
-  /* Post cards on mobile */
-  .post-card {
-    padding: 12px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-  }
-
-  .post-header {
-    width: 100px;
-    height: 100px;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-
-  .user-pic {
-    width: 36px;
-    height: 36px;
-  }
-
-  .post-title {
-    font-size: 14px;
-  }
-
-  .post-desc {
-    font-size: 12px;
-  }
-
-  .post-image {
-    max-height: 240px;
-  }
-
-  .post-actions {
-    gap: 4px;
-  }
-
-  .action-btn {
-    padding: 5px 8px;
-    font-size: 11px;
-  }
-}
-
-@media (max-width: 360px) {
-  .profile-navbar {
-    padding: 0 6px;
-    height: 50px;
-  }
-
-  .nav-back-btn {
-    font-size: 10px;
-    padding: 3px 6px;
-  }
-
-  .nav-title {
-    font-size: 12px;
-  }
-
-  .nav-logout-btn {
-    font-size: 9px;
-    padding: 3px 6px;
-  }
-
-  .back-btn-profile {
-    top: 60px;
-    left: 8px;
-    width: 32px;
-    height: 32px;
-  }
-
-  .profile-container {
-    width: 100%;
-  }
-
-  .settings-header {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .page-title {
-    font-size: 14px;
-    text-align: center;
-  }
-
-  .logout-btn {
-    width: 100%;
-    font-size: 10px;
-  }
-
-  .settings-card {
-    padding: 12px;
-  }
-
-  .card-header h3 {
-    font-size: 13px;
-  }
-
-  .image-preview-wrapper {
-    width: 60px;
-    height: 60px;
-  }
-
-  .upload-badge {
-    width: 20px;
-    height: 20px;
-  }
-
-  /* Tiny posts on ultra-small screens */
-  .post-card {
-    padding: 10px;
-    margin-bottom: 8px;
-  }
-
-  .user-pic {
-    width: 32px;
-    height: 32px;
-  }
-
-  .username {
-    font-size: 12px;
-  }
-
-  .post-title {
-    font-size: 13px;
-  }
-
-  .post-desc {
-    font-size: 11px;
-    -webkit-line-clamp: 2;
-  }
-
-  .post-image {
-    max-height: 180px;
-  }
-
-  .action-btn {
-    padding: 4px 6px;
-    font-size: 10px;
-  }
-}
-
-@media (min-width: 1025px) {
-  .profile-wrapper {
-    box-shadow: none;
-  }
-}
-
-[data-rmiz-modal-overlay="visible"] {
-  background: rgba(0, 0, 0, 0.96) !important;
-  backdrop-filter: blur(8px);
+  .profile-navbar { padding: 0 10px; }
+  .nav-logout-btn span { display: none; }
+  .nav-back-btn span { display: none; }
 }
