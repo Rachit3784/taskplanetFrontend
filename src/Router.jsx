@@ -26,7 +26,7 @@ function Router() {
             <Route path="manageProfile" element={<ProfileManagement />} />
                 
           </Route>
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<Navigate to="/home" /> } />
         </>
       ) : (
         <>
